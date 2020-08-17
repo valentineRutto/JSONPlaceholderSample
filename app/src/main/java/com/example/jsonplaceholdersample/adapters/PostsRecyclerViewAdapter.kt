@@ -8,7 +8,7 @@ import com.example.jsonplaceholdersample.R
 import com.example.jsonplaceholdersample.network.data.response.PostResponse
 import kotlinx.android.synthetic.main.row_post_item.view.*
 
-class PostsRecyclerViewAdapter(var listener: clickListener) :
+class PostsRecyclerViewAdapter :
     RecyclerView.Adapter<PostsRecyclerViewAdapter.ViewHolder>() {
 
     var postList: List<PostResponse> = emptyList()
@@ -39,11 +39,9 @@ class PostsRecyclerViewAdapter(var listener: clickListener) :
         }
     }
 
-    fun addData(postlist: PostResponse) {
-
+    fun addData(postlist: List<PostResponse>) {
+        this.postList = postlist
+        notifyDataSetChanged()
     }
 
-    interface clickListener {
-        fun showPost()
-    }
 }

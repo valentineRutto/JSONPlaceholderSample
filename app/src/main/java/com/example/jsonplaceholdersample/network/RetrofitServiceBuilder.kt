@@ -7,21 +7,43 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitServiceBuilder {
-    val interceptor = HttpLoggingInterceptor.Level.BODY
+    private var retrofit: Retrofit? = null
 
-    private val client = OkHttpClient.Builder()
-//        .addInterceptor(interceptor)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(15, TimeUnit.SECONDS).build()
+    fun getClient(): Retrofit {
+        if (retrofit == null) {
+            val httpLoggingInterceptor =
+                HttpLoggingInterceptor()
+            val loggingInterceptor =
+                httpLoggingInterceptor.apply {
+                    httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+                }
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://jsonplaceholder.typicode.com")
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(client)
-        .build()
+            val okClientBuilder: OkHttpClient.Builder =
+                OkHttpClient.Builder()
+                    .addInterceptor(loggingInterceptor)
+                    .connectTimeout(
+                        20,
+                        TimeUnit.SECONDS
+                    )
+                    .readTimeout(20, TimeUnit.SECONDS)
+
+            val client: OkHttpClient = okClientBuilder.build()
+
+
+            val retrofitBuilder: Retrofit.Builder =
+                Retrofit.Builder()
+                    .baseUrl("https://jsonplaceholder.typicode.com/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client)
+            retrofit = retrofitBuilder.build()
+
+            return retrofit!!
+        } else {
+            return retrofit!!
+        }
+    }
 
     fun <T> buildService(service: Class<T>): T {
-        return retrofit.create(service)
+        return retrofit!!.create(service)
     }
 }

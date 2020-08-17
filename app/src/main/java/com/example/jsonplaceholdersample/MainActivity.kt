@@ -1,7 +1,6 @@
 package com.example.jsonplaceholdersample
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,12 +10,11 @@ import com.example.jsonplaceholdersample.adapters.PostsRecyclerViewAdapter
 import com.example.jsonplaceholdersample.network.Endpoints
 import com.example.jsonplaceholdersample.network.RetrofitServiceBuilder
 import com.example.jsonplaceholdersample.network.data.response.PostResponse
-import com.example.jsonplaceholdersample.network.data.response.PostsCollection
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: PostsRecyclerViewAdapter
     lateinit var progressBar: ProgressBar
@@ -58,7 +56,6 @@ class MainActivity : AppCompatActivity(){
             }
 
             override fun onFailure(call: Call<List<PostResponse>>, t: Throwable) {
-                Log.d("error: ","${t.message}")
                 Toast.makeText(this@MainActivity, "${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
